@@ -1,2 +1,3 @@
 # web-app-core
-Vite + React + TS + Tailwind. Typed API Client Template with Auth flow / App shell/ base components / testing infra / CI 
+
+Reusable SPA template — Vite + React + TypeScript + Tailwind. Typed API client, auth flow, app shell, base components, testing infrastructure, CI.
