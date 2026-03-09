@@ -52,7 +52,7 @@ import { App } from "./App";
 
 ## React
 
-- **Function components only** — no class components
+- **Function components only** — no class components (exception: `ErrorBoundary` requires class component per React API)
 - **Named exports** — no default exports:
   ```typescript
   export function App({ apiBaseUrl }: AppProps) { ... }
@@ -82,13 +82,20 @@ import { App } from "./App";
 - **No inline styles, CSS modules, or styled-components**
 - Prefer semantic class grouping: layout → spacing → typography → color
 
+## API Client
+
+- **`ApiClient` is a plain class** with constructor injection (`baseUrl`, `tokenStorage`, `logger`) — not a hook or singleton
+- **Never call `fetch` directly** for backend requests — use `ApiClient`
+- **Envelope unwrapping** is automatic — methods return the `data` payload, not the envelope
+- **`ApiError`** is thrown for error responses — check `.code`, `.statusCode`, `.details`
+
 ## Configuration
 
 - **Zod schemas** for environment validation (`src/config/env.ts`)
 - **Required values have no defaults** — fail fast on startup
-- **Props injection** everywhere except `main.tsx`:
+- **Constructor injection** everywhere except `main.tsx`:
   ```typescript
-  <App apiBaseUrl={env.VITE_API_BASE_URL} />
+  const client = new ApiClient(env.VITE_API_BASE_URL, tokenStorage, logger);
   ```
 
 ## Tests
@@ -119,6 +126,17 @@ expect(screen.getByText("web-app-core")).toBeInTheDocument();
 ```typescript
 const result = EnvSchema.parse({ VITE_API_BASE_URL: "http://localhost:4000" });
 expect(result.VITE_API_BASE_URL).toBe("http://localhost:4000");
+```
+
+**API client tests use MSW for network mocking:**
+
+```typescript
+import { server } from "../mocks/server";
+server.use(
+  http.get(`${BASE_URL}/api/v1/me`, () => {
+    return HttpResponse.json({ data: { ... } });
+  })
+);
 ```
 
 ## Formatting

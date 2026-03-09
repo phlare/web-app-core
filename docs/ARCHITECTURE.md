@@ -16,14 +16,34 @@ All other modules receive their dependencies via props or constructor arguments.
 
 Environment variables exposed to the client must use the `VITE_` prefix (Vite convention).
 
-## Component Hierarchy (v0.1)
+## Component Hierarchy (v0.2)
 
 ```
-main.tsx (composition root — reads env, renders root)
-  └── App (receives apiBaseUrl as prop)
+main.tsx (composition root — reads env, creates TokenStorage + Logger + ApiClient)
+  └── App (receives apiBaseUrl + apiClient as props)
+        └── ErrorBoundary (catches render errors, shows fallback)
+              └── ToastProvider (manages toast notifications)
+                    └── [page content]
 ```
 
 This hierarchy grows in later versions to include auth providers, router, query client, and app shell.
+
+## API Client
+
+`src/lib/api-client.ts` provides a typed HTTP client built against the elixir-api-core OpenAPI spec. Key behaviors:
+
+- **Envelope unwrapping** — Automatically extracts `data` from `{ data: T }` responses
+- **Error parsing** — Converts `{ error: { code, message, details } }` into `ApiError` instances
+- **Bearer auth** — Auto-attaches `Authorization: Bearer <token>` from TokenStorage
+- **401 auto-refresh** — On unauthorized response, refreshes the access token and retries the request once
+- **Refresh mutex** — A Promise-based lock deduplicates concurrent refresh attempts (if 3 requests get 401 simultaneously, only 1 refresh call is made)
+
+All types in `src/lib/api-types.ts` map 1:1 to the elixir-api-core OpenAPI spec schemas.
+
+## Token Strategy
+
+- **Access token** — Stored in-memory only (never in localStorage). Lost on page refresh, but refreshed automatically via refresh token. Mitigates XSS token theft.
+- **Refresh token** — Stored in localStorage for persistence across page loads. Rotated on every refresh call (elixir-api-core enforces rotation).
 
 ## Boundary Principle
 

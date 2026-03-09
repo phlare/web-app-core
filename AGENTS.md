@@ -6,7 +6,9 @@ This is a React SPA template built with Vite, React 19, TypeScript, and Tailwind
 - All success responses from the backend use: `{ "data": { ... } }`
 - All error responses use: `{ "error": { "code": "...", "message": "...", "details": {} } }`
 - Use Tailwind CSS utility classes for styling — no inline styles, CSS modules, or styled-components
-- Use function components with named exports — no default exports, no class components
+- Use function components with named exports — no default exports, no class components (exception: `ErrorBoundary` is a class component, required by React)
+- Use `ApiClient` via constructor injection — never call `fetch` directly for backend requests
+- Use `ApiError` from `src/lib/api-error.ts` for typed API errors — check `error.code` and `error.statusCode`
 
 ## TypeScript guidelines
 
@@ -22,7 +24,9 @@ This is a React SPA template built with Vite, React 19, TypeScript, and Tailwind
 - Use Vitest with explicit imports (`import { describe, it, expect } from "vitest"`) — no globals
 - Test files mirror the `src/` directory structure under `test/`
 - Use `render` and `screen` from `@testing-library/react` for component tests
+- Use `renderWithProviders` from `test/helpers.tsx` when testing components that need ToastProvider
 - DOM matchers from `@testing-library/jest-dom` are available via `test/setup.ts`
+- MSW handlers in `test/mocks/handlers.ts` provide realistic API fixtures — use `server.use()` for per-test overrides
 
 ## Formatting and linting
 

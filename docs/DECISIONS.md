@@ -24,3 +24,18 @@ Matches the validation library used in node-edge-core and elixir-api-core (via E
 
 **007 — Separate vitest.config.ts**
 Test configuration is isolated from the Vite build config. Tests use jsdom environment and a setup file for DOM matchers. Keeps concerns separated and avoids test config leaking into production builds.
+
+**008 — In-memory access token, localStorage refresh token**
+Access tokens are stored in-memory only (never localStorage) to mitigate XSS token theft. Refresh tokens use localStorage for persistence across page loads. Trade-off: access token is lost on refresh, but auto-refreshed transparently.
+
+**009 — Promise-based refresh mutex**
+A single `refreshPromise` field deduplicates concurrent token refresh attempts. If multiple requests get 401 simultaneously, they share one refresh call. Simple and sufficient — no external semaphore library needed.
+
+**010 — MSW for API test mocking**
+Mock Service Worker intercepts at the network level, providing more realistic tests than manual fetch mocking. Handlers are reusable across tests and can be overridden per-test with `server.use()`.
+
+**011 — Class component for ErrorBoundary**
+React does not support error boundary hooks (`getDerivedStateFromError`/`componentDidCatch` require class components). This is the sole exception to the "function components only" rule.
+
+**012 — Minimal toast system**
+The ToastProvider + useToast implementation is intentionally minimal — just enough to demonstrate error surfacing. Will be replaced by shadcn/ui Toast component in v0.4.

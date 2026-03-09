@@ -11,6 +11,28 @@ Versioned deliverables tracker for the SPA template.
 
 ---
 
+## v0.2 — API Client + Error Handling
+
+- [x] TypeScript types mapped 1:1 from elixir-api-core OpenAPI spec (`api-types.ts`)
+- [x] `ApiError` class with code, statusCode, details
+- [x] `TokenStorage` — access token in-memory, refresh token in localStorage
+- [x] `Logger` — structured console wrapper with level filtering
+- [x] `ApiClient` — typed HTTP client with envelope unwrapping, Bearer auth, 401 auto-refresh with mutex
+- [x] `ErrorBoundary` — React error boundary with fallback UI and retry
+- [x] `ToastProvider` + `useToast` — auto-dismissing toast notifications
+- [x] MSW test infrastructure — handlers for all auth endpoints, server lifecycle in setup
+- [x] `renderWithProviders` test helper
+- [x] App wired with ErrorBoundary + ToastProvider
+
+### v0.2 Summary
+
+- 17 tests passing across 8 files
+- Full typed API client with 401 refresh deduplication
+- Error boundary + toast notification system
+- MSW for network-level test mocking
+
+---
+
 ## v0.1 — Skeleton + Environment
 
 - [x] Vite 6 + React 19 + TypeScript (strict mode, Bundler resolution)
