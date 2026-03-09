@@ -11,6 +11,32 @@ Versioned deliverables tracker for the SPA template.
 
 ---
 
+## v0.3 — Auth + Routing
+
+- [x] `@tanstack/react-router` with file-based routing (Vite plugin codegen)
+- [x] Route files in `src/routes/` — `__root.tsx`, `index.tsx`, `login.tsx`, `register.tsx`
+- [x] Auto-generated type-safe route tree (`routeTree.gen.ts`, gitignored)
+- [x] `AuthContext` + `AuthProvider` + `useAuth` — thin React wrapper around ApiClient
+- [x] Session bootstrap from refresh token on mount
+- [x] `beforeLoad` route guards — protected routes redirect to `/login`, public-only routes redirect to `/`
+- [x] `SplashScreen` shown during session bootstrap (prevents flash of wrong content)
+- [x] `LoginPage` — email/password form with inline error display
+- [x] `RegisterPage` — email/password/display_name/account_name form
+- [x] `HomePage` — authenticated landing with user info + sign out
+- [x] Router invalidation on auth state change (ensures guards re-evaluate)
+- [x] `@testing-library/user-event` for realistic interaction tests
+- [x] Explicit `cleanup()` in test setup (vitest without globals)
+
+### v0.3 Summary
+
+- 25 tests passing across 12 files (+8 new tests)
+- File-based routing with type-safe navigation
+- Full auth flow: bootstrap, login, register, logout
+- Route protection via `beforeLoad` guards
+- Page components separated from route definitions
+
+---
+
 ## v0.2 — API Client + Error Handling
 
 - [x] TypeScript types mapped 1:1 from elixir-api-core OpenAPI spec (`api-types.ts`)

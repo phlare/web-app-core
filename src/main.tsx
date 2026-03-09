@@ -17,6 +17,6 @@ const apiClient = new ApiClient(env.VITE_API_BASE_URL, tokenStorage, logger);
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <App apiBaseUrl={env.VITE_API_BASE_URL} apiClient={apiClient} />
+    <App apiClient={apiClient} tokenStorage={tokenStorage} />
   </StrictMode>
 );

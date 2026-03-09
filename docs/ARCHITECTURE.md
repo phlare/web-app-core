@@ -16,17 +16,49 @@ All other modules receive their dependencies via props or constructor arguments.
 
 Environment variables exposed to the client must use the `VITE_` prefix (Vite convention).
 
-## Component Hierarchy (v0.2)
+## Component Hierarchy (v0.3)
 
 ```
 main.tsx (composition root — reads env, creates TokenStorage + Logger + ApiClient)
-  └── App (receives apiBaseUrl + apiClient as props)
-        └── ErrorBoundary (catches render errors, shows fallback)
-              └── ToastProvider (manages toast notifications)
-                    └── [page content]
+  └── App (props: apiClient, tokenStorage)
+        └── AuthProvider (manages auth state + session bootstrap)
+              └── RouterProvider (TanStack Router with auth context)
+                    └── __root.tsx (ErrorBoundary + ToastProvider + SplashScreen/Outlet)
+                          ├── index.tsx → HomePage (protected)
+                          ├── login.tsx → LoginPage (public-only)
+                          └── register.tsx → RegisterPage (public-only)
 ```
 
-This hierarchy grows in later versions to include auth providers, router, query client, and app shell.
+## Auth Flow
+
+### Session Bootstrap
+
+On mount, `AuthProvider` checks for an existing refresh token:
+
+1. If refresh token exists → calls `apiClient.refresh()` then `apiClient.getMe()` → hydrates user/account/role state
+2. If refresh fails → clears tokens, remains unauthenticated
+3. If no refresh token → immediately unauthenticated
+
+During bootstrap, `isLoading` is `true`. The root layout shows `SplashScreen` and route guards skip redirects, preventing a flash of the login page.
+
+### Route Protection
+
+Route guards use TanStack Router's `beforeLoad` hook with router context:
+
+- **Protected routes** (`/`): redirect to `/login` when `!isLoading && !isAuthenticated`
+- **Public-only routes** (`/login`, `/register`): redirect to `/` when `!isLoading && isAuthenticated`
+
+Auth state changes trigger `router.invalidate()` to re-evaluate guards without navigation.
+
+## File-Based Routing
+
+Route files in `src/routes/` follow TanStack Router conventions. The `@tanstack/router-plugin` Vite plugin watches the filesystem and generates a type-safe route tree (`src/routeTree.gen.ts`, gitignored). This provides:
+
+- Autocomplete for `Link to="/..."` and `useNavigate({ to })`
+- Compile-time errors for invalid route paths
+- Automatic code splitting via `.lazy.tsx` suffix (when needed)
+
+Route files are thin — they define routing config (guards, loaders) and delegate rendering to page components in `src/pages/`.
 
 ## API Client
 

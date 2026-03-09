@@ -39,3 +39,15 @@ React does not support error boundary hooks (`getDerivedStateFromError`/`compone
 
 **012 — Minimal toast system**
 The ToastProvider + useToast implementation is intentionally minimal — just enough to demonstrate error surfacing. Will be replaced by shadcn/ui Toast component in v0.4.
+
+**013 — File-based routing with TanStack Router plugin**
+Convention-driven route registration via `@tanstack/router-plugin`. Drop a file in `src/routes/`, get a route. The plugin auto-generates a fully type-safe route tree (`routeTree.gen.ts`). For a reusable template, this establishes a clear convention that downstream projects inherit. The codegen is transparent (Vite plugin in dev, build-time for prod). Trade-off: adds a dev dependency and `.gitignore` entry for the generated file.
+
+**014 — Auth context as thin React wrapper**
+Auth logic stays in the plain-class `ApiClient` (refresh, login, logout, token management). `AuthContext`/`AuthProvider` is just a React bridge — it holds state, delegates to ApiClient, and calls `getMe()` to hydrate. This keeps the lib layer testable without React and avoids duplicating logic between the context and the client.
+
+**015 — beforeLoad guards over wrapper components**
+TanStack Router's `beforeLoad` hook runs before the route component mounts, preventing flash of unauthorized content. Router context provides auth state without importing React context directly in route files. Auth state changes trigger `router.invalidate()` to re-evaluate guards.
+
+**016 — Route files separate from page components**
+Route files in `src/routes/` define routing config (guards, loaders, search params). Page components in `src/pages/` handle UI rendering. This keeps route files focused on routing concerns, makes page components independently testable, and allows page reuse across routes if needed.

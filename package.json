@@ -21,6 +21,7 @@
     "precommit": "npm run format && npm run lint && npm run typecheck && npm test"
   },
   "dependencies": {
+    "@tanstack/react-router": "^1.166.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "zod": "^3.24.0"
@@ -28,8 +29,10 @@
   "devDependencies": {
     "@eslint/js": "^9.0.0",
     "@tailwindcss/vite": "^4.0.0",
+    "@tanstack/router-plugin": "^1.166.3",
     "@testing-library/jest-dom": "^6.0.0",
     "@testing-library/react": "^16.0.0",
+    "@testing-library/user-event": "^14.6.1",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "@vitejs/plugin-react": "^4.0.0",

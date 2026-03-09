@@ -1,23 +1,58 @@
+import { useEffect, useMemo } from "react";
+import { createRouter, RouterProvider } from "@tanstack/react-router";
 import type { ApiClient } from "./lib/api-client";
-import { ErrorBoundary } from "./components/ErrorBoundary";
-import { ToastProvider } from "./components/Toast";
+import type { TokenStorage } from "./lib/token-storage";
+import { AuthProvider } from "./auth/AuthProvider";
+import { useAuth } from "./auth/useAuth";
+import { routeTree } from "./routeTree.gen";
 
-interface AppProps {
-  apiBaseUrl: string;
-  apiClient: ApiClient;
+declare module "@tanstack/react-router" {
+  interface Register {
+    router: ReturnType<typeof createAppRouter>;
+  }
 }
 
-export function App({ apiBaseUrl }: AppProps) {
+const noOp = async () => {};
+
+function createAppRouter() {
+  return createRouter({
+    routeTree,
+    context: {
+      auth: {
+        user: null,
+        accountId: null,
+        role: null,
+        isAuthenticated: false,
+        isLoading: true,
+        login: noOp,
+        register: noOp,
+        logout: noOp
+      }
+    },
+    defaultPreload: "intent"
+  });
+}
+
+interface AppProps {
+  apiClient: ApiClient;
+  tokenStorage: TokenStorage;
+}
+
+export function App({ apiClient, tokenStorage }: AppProps) {
   return (
-    <ErrorBoundary>
-      <ToastProvider>
-        <div className="flex min-h-screen items-center justify-center bg-gray-50">
-          <div className="text-center">
-            <h1 className="text-2xl font-bold text-gray-900">web-app-core</h1>
-            <p className="mt-2 text-gray-600">API: {apiBaseUrl}</p>
-          </div>
-        </div>
-      </ToastProvider>
-    </ErrorBoundary>
+    <AuthProvider apiClient={apiClient} tokenStorage={tokenStorage}>
+      <InnerApp />
+    </AuthProvider>
   );
+}
+
+function InnerApp() {
+  const auth = useAuth();
+  const router = useMemo(() => createAppRouter(), []);
+
+  useEffect(() => {
+    void router.invalidate();
+  }, [router, auth.isAuthenticated, auth.isLoading]);
+
+  return <RouterProvider router={router} context={{ auth }} />;
 }
