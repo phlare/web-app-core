@@ -11,6 +11,32 @@ Versioned deliverables tracker for the SPA template.
 
 ---
 
+## v0.4 — Layout + Polish
+
+- [x] shadcn/ui foundation — CLI init, `components.json`, CSS variable theme, `cn()` utility
+- [x] shadcn/ui components: Button, Input, Card, Dialog, DropdownMenu, Sonner (Toaster)
+- [x] `ApiClientContext` + `useApiClient` hook — exposes ApiClient via React context
+- [x] Toast migration — replaced custom ToastProvider/useToast with sonner
+- [x] App shell — `AppShell`, `Sidebar` (desktop fixed + mobile overlay), `Header` (hamburger toggle)
+- [x] Pathless layout route (`_app.tsx`) — wraps authenticated routes in app shell, owns auth guard
+- [x] Route restructure: `_app/index.tsx` (home), `_app/health.tsx` (health) inside layout
+- [x] `HealthPage` — API connectivity check with status display and refresh
+- [x] `NotFoundPage` — 404 page with link home, registered as `notFoundComponent`
+- [x] Upgraded LoginPage, RegisterPage, HomePage to shadcn/ui components (Card, Button, Input)
+- [x] New dependencies: clsx, tailwind-merge, class-variance-authority, @radix-ui/react-slot, @radix-ui/react-dialog, @radix-ui/react-dropdown-menu, lucide-react, sonner
+- [x] Deleted: `Toast.tsx`, `ToastContext.ts`, `useToast.ts`
+
+### v0.4 Summary
+
+- 34 tests passing across 17 files (+9 new tests)
+- App shell with responsive sidebar (desktop fixed, mobile overlay)
+- shadcn/ui component library with CSS variable theming
+- Health check page, 404 page
+- Sonner toast system replacing custom implementation
+- Final template version — ready for product app derivation
+
+---
+
 ## v0.3 — Auth + Routing
 
 - [x] `@tanstack/react-router` with file-based routing (Vite plugin codegen)

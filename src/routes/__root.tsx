@@ -2,15 +2,17 @@ import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
 import type { AuthContextValue } from "../auth/useAuth";
 import { useAuth } from "../auth/useAuth";
 import { ErrorBoundary } from "../components/ErrorBoundary";
-import { ToastProvider } from "../components/Toast";
+import { Toaster } from "../components/ui/sonner";
 import { SplashScreen } from "../pages/SplashScreen";
+import { NotFoundPage } from "../pages/NotFoundPage";
 
 interface RouterContext {
   auth: AuthContextValue;
 }
 
 export const Route = createRootRouteWithContext<RouterContext>()({
-  component: RootLayout
+  component: RootLayout,
+  notFoundComponent: NotFoundPage
 });
 
 function RootLayout() {
@@ -18,7 +20,8 @@ function RootLayout() {
 
   return (
     <ErrorBoundary>
-      <ToastProvider>{isLoading ? <SplashScreen /> : <Outlet />}</ToastProvider>
+      {isLoading ? <SplashScreen /> : <Outlet />}
+      <Toaster />
     </ErrorBoundary>
   );
 }

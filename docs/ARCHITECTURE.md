@@ -16,17 +16,21 @@ All other modules receive their dependencies via props or constructor arguments.
 
 Environment variables exposed to the client must use the `VITE_` prefix (Vite convention).
 
-## Component Hierarchy (v0.3)
+## Component Hierarchy (v0.4)
 
 ```
 main.tsx (composition root — reads env, creates TokenStorage + Logger + ApiClient)
   └── App (props: apiClient, tokenStorage)
-        └── AuthProvider (manages auth state + session bootstrap)
-              └── RouterProvider (TanStack Router with auth context)
-                    └── __root.tsx (ErrorBoundary + ToastProvider + SplashScreen/Outlet)
-                          ├── index.tsx → HomePage (protected)
-                          ├── login.tsx → LoginPage (public-only)
-                          └── register.tsx → RegisterPage (public-only)
+        └── ApiClientProvider (exposes apiClient via React context)
+              └── AuthProvider (manages auth state + session bootstrap)
+                    └── RouterProvider (TanStack Router with auth context)
+                          └── __root.tsx (ErrorBoundary + Toaster + SplashScreen/Outlet)
+                                ├── login.tsx → LoginPage (public-only, no shell)
+                                ├── register.tsx → RegisterPage (public-only, no shell)
+                                ├── _app.tsx → AppShell (sidebar + header + Outlet)
+                                │     ├── _app/index.tsx → HomePage
+                                │     └── _app/health.tsx → HealthPage
+                                └── [404] → NotFoundPage
 ```
 
 ## Auth Flow

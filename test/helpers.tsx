@@ -7,9 +7,10 @@ import {
   createRouter,
   RouterProvider
 } from "@tanstack/react-router";
-import { ToastProvider } from "../src/components/Toast";
 import { AuthContext } from "../src/auth/AuthContext";
 import type { AuthContextValue } from "../src/auth/AuthContext";
+import { ApiClientContext } from "../src/lib/ApiClientContext";
+import type { ApiClient } from "../src/lib/api-client";
 
 const noOp = async () => {};
 
@@ -25,12 +26,13 @@ const defaultAuth: AuthContextValue = {
 };
 
 export function renderWithProviders(ui: ReactNode) {
-  return render(<ToastProvider>{ui}</ToastProvider>);
+  return render(ui);
 }
 
 interface RenderWithRouterOptions {
   auth?: Partial<AuthContextValue>;
   initialPath?: string;
+  apiClient?: ApiClient;
 }
 
 export function renderWithRouter(
@@ -56,11 +58,13 @@ export function renderWithRouter(
     })
   });
 
+  const mockApiClient = options.apiClient ?? ({} as ApiClient);
+
   return render(
-    <AuthContext.Provider value={auth}>
-      <ToastProvider>
+    <ApiClientContext.Provider value={mockApiClient}>
+      <AuthContext.Provider value={auth}>
         <RouterProvider router={router} />
-      </ToastProvider>
-    </AuthContext.Provider>
+      </AuthContext.Provider>
+    </ApiClientContext.Provider>
   );
 }

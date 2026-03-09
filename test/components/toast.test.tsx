@@ -1,29 +1,17 @@
 import { describe, expect, it } from "vitest";
-import { render, screen, act } from "@testing-library/react";
-import { ToastProvider } from "../../src/components/Toast";
-import { useToast } from "../../src/components/useToast";
+import { render, screen } from "@testing-library/react";
+import { toast } from "sonner";
+import { act } from "@testing-library/react";
+import { Toaster } from "../../src/components/ui/sonner";
 
-function ToastTrigger() {
-  const toast = useToast();
-  return (
-    <button onClick={() => toast.error("Something failed")}>
-      Trigger Error
-    </button>
-  );
-}
-
-describe("Toast", () => {
-  it("renders an error toast when triggered", async () => {
-    render(
-      <ToastProvider>
-        <ToastTrigger />
-      </ToastProvider>
-    );
+describe("Toaster (sonner)", () => {
+  it("renders a toast when triggered", async () => {
+    render(<Toaster />);
 
     await act(async () => {
-      screen.getByText("Trigger Error").click();
+      toast.error("Something failed");
     });
 
-    expect(screen.getByRole("alert")).toHaveTextContent("Something failed");
+    expect(await screen.findByText("Something failed")).toBeInTheDocument();
   });
 });

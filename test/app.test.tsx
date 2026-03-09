@@ -21,7 +21,7 @@ describe("App", () => {
     render(<App apiClient={apiClient} tokenStorage={tokenStorage} />);
     await waitFor(() => {
       expect(
-        screen.getByRole("heading", { name: "Sign in" })
+        screen.getByText("Enter your credentials to continue")
       ).toBeInTheDocument();
     });
   });

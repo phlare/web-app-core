@@ -80,6 +80,67 @@ describe("Route guards", () => {
     });
   });
 
+  it("renders layout route shell for authenticated users", async () => {
+    const auth = buildAuth({
+      user: { id: "u-001", email: "test@example.com", display_name: "Test" },
+      accountId: "a-001",
+      role: "owner",
+      isAuthenticated: true
+    });
+
+    const rootRoute = createRootRouteWithContext<{ auth: AuthContextValue }>()({
+      component: Outlet
+    });
+
+    const appLayoutRoute = createRoute({
+      getParentRoute: () => rootRoute,
+      id: "_app",
+      beforeLoad: ({ context }) => {
+        if (!context.auth.isLoading && !context.auth.isAuthenticated) {
+          throw redirect({ to: "/login" });
+        }
+      },
+      component: () => (
+        <div>
+          <nav>app-shell</nav>
+          <Outlet />
+        </div>
+      )
+    });
+
+    const homeRoute = createRoute({
+      getParentRoute: () => appLayoutRoute,
+      path: "/",
+      component: () => <div>home-content</div>
+    });
+
+    const loginRoute = createRoute({
+      getParentRoute: () => rootRoute,
+      path: "/login",
+      component: () => <div>login</div>
+    });
+
+    const router = createRouter({
+      routeTree: rootRoute.addChildren([
+        appLayoutRoute.addChildren([homeRoute]),
+        loginRoute
+      ]),
+      context: { auth },
+      history: createMemoryHistory({ initialEntries: ["/"] })
+    });
+
+    render(
+      <AuthContext.Provider value={auth}>
+        <RouterProvider router={router} />
+      </AuthContext.Provider>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText("app-shell")).toBeInTheDocument();
+      expect(screen.getByText("home-content")).toBeInTheDocument();
+    });
+  });
+
   it("redirects authenticated user from /login to /", async () => {
     const auth = buildAuth({
       user: { id: "u-001", email: "test@example.com", display_name: "Test" },

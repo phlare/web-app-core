@@ -2,6 +2,7 @@ import { useEffect, useMemo } from "react";
 import { createRouter, RouterProvider } from "@tanstack/react-router";
 import type { ApiClient } from "./lib/api-client";
 import type { TokenStorage } from "./lib/token-storage";
+import { ApiClientContext } from "./lib/ApiClientContext";
 import { AuthProvider } from "./auth/AuthProvider";
 import { useAuth } from "./auth/useAuth";
 import { routeTree } from "./routeTree.gen";
@@ -40,9 +41,11 @@ interface AppProps {
 
 export function App({ apiClient, tokenStorage }: AppProps) {
   return (
-    <AuthProvider apiClient={apiClient} tokenStorage={tokenStorage}>
-      <InnerApp />
-    </AuthProvider>
+    <ApiClientContext.Provider value={apiClient}>
+      <AuthProvider apiClient={apiClient} tokenStorage={tokenStorage}>
+        <InnerApp />
+      </AuthProvider>
+    </ApiClientContext.Provider>
   );
 }
 

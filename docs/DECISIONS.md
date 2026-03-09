@@ -51,3 +51,15 @@ TanStack Router's `beforeLoad` hook runs before the route component mounts, prev
 
 **016 — Route files separate from page components**
 Route files in `src/routes/` define routing config (guards, loaders, search params). Page components in `src/pages/` handle UI rendering. This keeps route files focused on routing concerns, makes page components independently testable, and allows page reuse across routes if needed.
+
+**017 — Pathless layout route for app shell**
+TanStack Router's pathless layout route (`_app.tsx`) wraps all authenticated routes in the app shell without adding a URL segment. The auth guard lives on this layout route, so child routes inherit protection automatically. Login/register remain direct root children (no shell).
+
+**018 — Sonner over custom toast**
+Replaced the minimal custom ToastProvider/useToast with sonner via shadcn/ui's Toaster component. Sonner provides a richer API (`toast.success()`, `toast.error()`), built-in animations, and stacking — all without maintaining custom state management. The custom toast was a v0.2 placeholder.
+
+**019 — ApiClientContext for direct API access**
+New React context exposing the `ApiClient` instance for pages that need direct API calls (e.g., HealthPage). Mirrors the AuthContext pattern. Wrapped above AuthProvider in the component tree so both auth and non-auth pages can access it.
+
+**020 — CSS variable theming via shadcn/ui**
+Using oklch color space CSS variables with a `@theme inline` block in `index.css`. shadcn/ui components reference semantic color names (`--primary`, `--muted`, etc.) rather than Tailwind's default palette. This enables theme customization via CSS variables without touching component code.
