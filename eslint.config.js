@@ -7,7 +7,13 @@ export default tseslint.config(
   eslint.configs.recommended,
   ...tseslint.configs.recommended,
   {
-    ignores: ["dist/", "node_modules/", "coverage/"]
+    ignores: ["dist/", "node_modules/", "coverage/", "src/routeTree.gen.ts"]
+  },
+  {
+    files: ["src/components/ui/**/*.tsx"],
+    rules: {
+      "react-refresh/only-export-components": "off"
+    }
   },
   {
     plugins: {
