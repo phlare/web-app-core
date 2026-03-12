@@ -9,11 +9,11 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "tsc --noEmit && vite build",
+    "build": "tsr generate && tsc --noEmit && vite build",
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsr generate && tsc --noEmit",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
@@ -37,6 +37,7 @@
   "devDependencies": {
     "@eslint/js": "^9.0.0",
     "@tailwindcss/vite": "^4.0.0",
+    "@tanstack/router-cli": "^1.166.7",
     "@tanstack/router-plugin": "^1.166.3",
     "@testing-library/jest-dom": "^6.0.0",
     "@testing-library/react": "^16.0.0",
