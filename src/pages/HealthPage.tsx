@@ -33,8 +33,23 @@ export function HealthPage() {
   }, [apiClient]);
 
   useEffect(() => {
-    void checkHealth();
-  }, [checkHealth]);
+    let cancelled = false;
+    apiClient.getHealth().then(
+      (data) => {
+        if (cancelled) return;
+        setHealth(data);
+        setStatus("healthy");
+      },
+      () => {
+        if (cancelled) return;
+        setStatus("unhealthy");
+        setError("Could not reach the API server");
+      }
+    );
+    return () => {
+      cancelled = true;
+    };
+  }, [apiClient]);
 
   return (
     <div className="mx-auto max-w-lg">
