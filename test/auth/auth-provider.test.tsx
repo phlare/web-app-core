@@ -92,6 +92,28 @@ describe("AuthProvider", () => {
     expect(tokenStorage.hasSession()).toBe(false);
   });
 
+  it("preserves session hint on network error during bootstrap", async () => {
+    const { apiClient, tokenStorage } = buildDeps();
+    tokenStorage.markSession();
+
+    server.use(
+      http.post(`${BASE_URL}/api/v1/auth/refresh`, () => {
+        return HttpResponse.error();
+      })
+    );
+
+    render(
+      <AuthProvider apiClient={apiClient} tokenStorage={tokenStorage}>
+        <AuthStatus />
+      </AuthProvider>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText("unauthenticated")).toBeInTheDocument();
+    });
+    expect(tokenStorage.hasSession()).toBe(true);
+  });
+
   it("sets user state after login", async () => {
     const { apiClient, tokenStorage } = buildDeps();
 

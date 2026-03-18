@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { ReactNode } from "react";
 import type { ApiClient } from "../lib/api-client";
+import { ApiError } from "../lib/api-error";
 import type { TokenStorage } from "../lib/token-storage";
 import type {
   LoginRequest,
@@ -39,8 +40,10 @@ export function AuthProvider({
         setUser(me.user);
         setAccountId(me.account_id);
         setRole(me.role);
-      } catch {
-        tokenStorage.clear();
+      } catch (err) {
+        if (err instanceof ApiError && err.statusCode === 401) {
+          tokenStorage.clear();
+        }
       } finally {
         setIsLoading(false);
       }
