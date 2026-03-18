@@ -1,4 +1,4 @@
-const REFRESH_TOKEN_KEY = "refresh_token";
+const SESSION_KEY = "has_session";
 
 export class TokenStorage {
   private accessToken: string | null = null;
@@ -11,16 +11,16 @@ export class TokenStorage {
     this.accessToken = token;
   }
 
-  getRefreshToken(): string | null {
-    return localStorage.getItem(REFRESH_TOKEN_KEY);
+  hasSession(): boolean {
+    return localStorage.getItem(SESSION_KEY) === "1";
   }
 
-  setRefreshToken(token: string): void {
-    localStorage.setItem(REFRESH_TOKEN_KEY, token);
+  markSession(): void {
+    localStorage.setItem(SESSION_KEY, "1");
   }
 
   clear(): void {
     this.accessToken = null;
-    localStorage.removeItem(REFRESH_TOKEN_KEY);
+    localStorage.removeItem(SESSION_KEY);
   }
 }

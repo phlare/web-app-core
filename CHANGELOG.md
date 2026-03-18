@@ -11,6 +11,24 @@ Versioned deliverables tracker for the SPA template.
 
 ---
 
+## v0.5 — Security Hardening
+
+- [x] Move refresh token from localStorage to HttpOnly cookie (server-managed)
+- [x] Add `has_session` localStorage hint for bootstrap optimization
+- [x] Add `credentials: "include"` to all fetch calls for cookie transport
+- [x] Wrap error response JSON parsing in try/catch with fallback for non-JSON errors
+- [x] Add `minLength={8}` to registration password field
+- [x] Validate `VITE_API_BASE_URL` is HTTPS in production builds
+- [x] Fix deprecated `FormEvent` import in RegisterPage
+
+### v0.5 Summary
+
+- 35 tests passing across 17 files (+1 new test for non-JSON error fallback)
+- Refresh token no longer exposed to JavaScript (XSS mitigation)
+- Defense-in-depth: client-side password length validation, HTTPS enforcement, error resilience
+
+---
+
 ## v0.4 — Layout + Polish
 
 - [x] shadcn/ui foundation — CLI init, `components.json`, CSS variable theme, `cn()` utility
