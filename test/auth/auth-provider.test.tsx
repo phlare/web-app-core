@@ -46,9 +46,9 @@ describe("AuthProvider", () => {
     localStorage.clear();
   });
 
-  it("bootstraps session from refresh token", async () => {
+  it("bootstraps session from cookie hint", async () => {
     const { apiClient, tokenStorage } = buildDeps();
-    tokenStorage.setRefreshToken("valid-refresh");
+    tokenStorage.markSession();
 
     render(
       <AuthProvider apiClient={apiClient} tokenStorage={tokenStorage}>
@@ -65,9 +65,9 @@ describe("AuthProvider", () => {
     });
   });
 
-  it("handles failed bootstrap by clearing tokens", async () => {
+  it("handles failed bootstrap by clearing session", async () => {
     const { apiClient, tokenStorage } = buildDeps();
-    tokenStorage.setRefreshToken("bad-refresh");
+    tokenStorage.markSession();
 
     server.use(
       http.post(`${BASE_URL}/api/v1/auth/refresh`, () => {
@@ -89,7 +89,7 @@ describe("AuthProvider", () => {
     await waitFor(() => {
       expect(screen.getByText("unauthenticated")).toBeInTheDocument();
     });
-    expect(tokenStorage.getRefreshToken()).toBeNull();
+    expect(tokenStorage.hasSession()).toBe(false);
   });
 
   it("sets user state after login", async () => {
@@ -119,7 +119,7 @@ describe("AuthProvider", () => {
 
   it("clears user state after logout", async () => {
     const { apiClient, tokenStorage } = buildDeps();
-    tokenStorage.setRefreshToken("valid-refresh");
+    tokenStorage.markSession();
 
     render(
       <AuthProvider apiClient={apiClient} tokenStorage={tokenStorage}>

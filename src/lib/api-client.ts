@@ -37,7 +37,7 @@ export class ApiClient {
       { skipAuth: true }
     );
     this.tokenStorage.setAccessToken(data.access_token);
-    this.tokenStorage.setRefreshToken(data.refresh_token);
+    this.tokenStorage.markSession();
     return data;
   }
 
@@ -49,32 +49,24 @@ export class ApiClient {
       { skipAuth: true }
     );
     this.tokenStorage.setAccessToken(data.access_token);
-    this.tokenStorage.setRefreshToken(data.refresh_token);
+    this.tokenStorage.markSession();
     return data;
   }
 
   async refresh(): Promise<TokenPair> {
-    const refreshToken = this.tokenStorage.getRefreshToken();
-    if (!refreshToken) {
-      throw new ApiError("NO_REFRESH_TOKEN", "No refresh token available", 401);
-    }
     const data = await this.request<TokenPair>(
       "POST",
       "/api/v1/auth/refresh",
-      { refresh_token: refreshToken },
+      undefined,
       { skipAuth: true }
     );
     this.tokenStorage.setAccessToken(data.access_token);
-    this.tokenStorage.setRefreshToken(data.refresh_token);
     return data;
   }
 
   async logout(): Promise<void> {
-    const refreshToken = this.tokenStorage.getRefreshToken();
-    if (refreshToken) {
-      await this.request<{ status: string }>("POST", "/api/v1/auth/logout", {
-        refresh_token: refreshToken
-      });
+    if (this.tokenStorage.hasSession()) {
+      await this.request<{ status: string }>("POST", "/api/v1/auth/logout");
     }
     this.tokenStorage.clear();
   }
@@ -122,6 +114,7 @@ export class ApiClient {
     const response = await fetch(url, {
       method,
       headers,
+      credentials: "include",
       body: body ? JSON.stringify(body) : null
     });
 
@@ -149,7 +142,16 @@ export class ApiClient {
       }
     }
 
-    const errorBody = (await response.json()) as ErrorEnvelope;
+    let errorBody: ErrorEnvelope;
+    try {
+      errorBody = (await response.json()) as ErrorEnvelope;
+    } catch {
+      throw new ApiError(
+        "UNKNOWN",
+        `Request failed with status ${response.status}`,
+        response.status
+      );
+    }
     const detail = errorBody.error;
     throw new ApiError(
       detail.code,

@@ -52,6 +52,22 @@ describe("ApiClient", () => {
     }
   });
 
+  it("throws ApiError with fallback on non-JSON error response", async () => {
+    server.use(
+      http.get(`${BASE_URL}/healthz`, () => {
+        return new HttpResponse("Bad Gateway", { status: 502 });
+      })
+    );
+
+    try {
+      await client.getHealth();
+    } catch (e) {
+      const err = e as ApiError;
+      expect(err.code).toBe("UNKNOWN");
+      expect(err.statusCode).toBe(502);
+    }
+  });
+
   it("attaches bearer token to authenticated requests", async () => {
     let capturedAuth: string | null = null;
     server.use(
@@ -79,7 +95,7 @@ describe("ApiClient", () => {
 
   it("refreshes token and retries on 401", async () => {
     tokenStorage.setAccessToken("expired-token");
-    tokenStorage.setRefreshToken("valid-refresh");
+    tokenStorage.markSession();
 
     let callCount = 0;
     server.use(
@@ -120,7 +136,7 @@ describe("ApiClient", () => {
 
   it("deduplicates concurrent refresh calls", async () => {
     tokenStorage.setAccessToken("expired");
-    tokenStorage.setRefreshToken("valid-refresh");
+    tokenStorage.markSession();
 
     let refreshCount = 0;
     server.use(

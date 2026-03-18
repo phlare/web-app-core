@@ -1,5 +1,4 @@
-import { useState } from "react";
-import type { FormEvent } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useAuth } from "../auth/useAuth";
 import { ApiError } from "../lib/api-error";
@@ -24,7 +23,7 @@ export function RegisterPage() {
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = async (e: FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
     setIsSubmitting(true);
@@ -84,6 +83,7 @@ export function RegisterPage() {
                 id="password"
                 type="password"
                 required
+                minLength={8}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />

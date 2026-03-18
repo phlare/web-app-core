@@ -15,18 +15,18 @@ describe("TokenStorage", () => {
     expect(storage.getAccessToken()).toBe("abc");
   });
 
-  it("stores and retrieves refresh token in localStorage", () => {
-    expect(storage.getRefreshToken()).toBeNull();
-    storage.setRefreshToken("xyz");
-    expect(storage.getRefreshToken()).toBe("xyz");
-    expect(localStorage.getItem("refresh_token")).toBe("xyz");
+  it("tracks session hint in localStorage", () => {
+    expect(storage.hasSession()).toBe(false);
+    storage.markSession();
+    expect(storage.hasSession()).toBe(true);
+    expect(localStorage.getItem("has_session")).toBe("1");
   });
 
-  it("clear removes both tokens", () => {
+  it("clear removes access token and session hint", () => {
     storage.setAccessToken("abc");
-    storage.setRefreshToken("xyz");
+    storage.markSession();
     storage.clear();
     expect(storage.getAccessToken()).toBeNull();
-    expect(storage.getRefreshToken()).toBeNull();
+    expect(storage.hasSession()).toBe(false);
   });
 });

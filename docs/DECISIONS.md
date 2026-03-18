@@ -25,8 +25,8 @@ Matches the validation library used in node-edge-core and elixir-api-core (via E
 **007 — Separate vitest.config.ts**
 Test configuration is isolated from the Vite build config. Tests use jsdom environment and a setup file for DOM matchers. Keeps concerns separated and avoids test config leaking into production builds.
 
-**008 — In-memory access token, localStorage refresh token**
-Access tokens are stored in-memory only (never localStorage) to mitigate XSS token theft. Refresh tokens use localStorage for persistence across page loads. Trade-off: access token is lost on refresh, but auto-refreshed transparently.
+**008 — In-memory access token, HttpOnly cookie refresh token**
+Access tokens are stored in-memory only (never localStorage) to mitigate XSS token theft. Refresh tokens are managed as HttpOnly cookies set by the server — the frontend never reads or stores them. A `has_session` localStorage flag hints whether to attempt a refresh on bootstrap, avoiding a network round-trip for unauthenticated users. All fetch calls use `credentials: "include"` so the browser sends cookies automatically. Trade-off: requires CORS `credentials: true` on the API and `SameSite`/`Secure` cookie configuration server-side.
 
 **009 — Promise-based refresh mutex**
 A single `refreshPromise` field deduplicates concurrent token refresh attempts. If multiple requests get 401 simultaneously, they share one refresh call. Simple and sufficient — no external semaphore library needed.

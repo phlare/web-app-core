@@ -28,8 +28,7 @@ export function AuthProvider({
 
   useEffect(() => {
     const bootstrap = async () => {
-      const refreshToken = tokenStorage.getRefreshToken();
-      if (!refreshToken) {
+      if (!tokenStorage.hasSession()) {
         setIsLoading(false);
         return;
       }
