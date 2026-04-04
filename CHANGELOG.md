@@ -11,6 +11,17 @@ Versioned deliverables tracker for the SPA template.
 
 ---
 
+## v0.5.4 — Dependency updates (2026-04-04)
+
+- [x] typescript 5.9.3 → 6.0.2
+- [x] lucide-react 0.577.0 → 1.7.0
+- [x] vite 8.0.1 → 8.0.3
+- [x] vitest 4.1.0 → 4.1.2
+- [x] typescript-eslint 8.57.1 → 8.57.2
+- [x] @tanstack/router-plugin + router-cli bumps
+
+---
+
 ## v0.5 — Security Hardening
 
 - [x] Move refresh token from localStorage to HttpOnly cookie (server-managed)

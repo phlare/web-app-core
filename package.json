@@ -1,6 +1,6 @@
 {
   "name": "web-app-core",
-  "version": "0.1.0",
+  "version": "0.5.4",
   "private": true,
   "description": "Reusable SPA template with Vite, React, TypeScript, and Tailwind",
   "type": "module",
