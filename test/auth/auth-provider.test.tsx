@@ -121,7 +121,9 @@ describe("AuthProvider", () => {
     server.use(
       http.post(`${BASE_URL}/api/v1/auth/refresh`, () => {
         return HttpResponse.json(
-          { error: { code: "INVALID_TOKEN", message: "No session", details: {} } },
+          {
+            error: { code: "INVALID_TOKEN", message: "No session", details: {} }
+          },
           { status: 401 }
         );
       })

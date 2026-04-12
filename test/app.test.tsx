@@ -11,11 +11,7 @@ const BASE_URL = "http://localhost:4000";
 
 function buildTestDeps(): { apiClient: ApiClient; tokenStorage: TokenStorage } {
   const tokenStorage = new TokenStorage();
-  const apiClient = new ApiClient(
-    BASE_URL,
-    tokenStorage,
-    new Logger("silent")
-  );
+  const apiClient = new ApiClient(BASE_URL, tokenStorage, new Logger("silent"));
   return { apiClient, tokenStorage };
 }
 
@@ -24,7 +20,9 @@ describe("App", () => {
     server.use(
       http.post(`${BASE_URL}/api/v1/auth/refresh`, () => {
         return HttpResponse.json(
-          { error: { code: "INVALID_TOKEN", message: "No session", details: {} } },
+          {
+            error: { code: "INVALID_TOKEN", message: "No session", details: {} }
+          },
           { status: 401 }
         );
       })
