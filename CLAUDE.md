@@ -6,6 +6,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 React SPA template for building product frontends. This is a reusable foundation — it contains no product logic, only app plumbing (auth, API client, routing, shell, components). Vite 6 + React 19 + TypeScript + Tailwind CSS v4. Node 24+ (pinned in `.nvmrc`).
 
+## Workflows
+
+See workspace-level commit workflow: `../.claude/instructions/commit_workflow.md`
+
 ## Commands
 
 ```bash
