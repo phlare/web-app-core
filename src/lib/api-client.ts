@@ -61,6 +61,7 @@ export class ApiClient {
       { skipAuth: true }
     );
     this.tokenStorage.setAccessToken(data.access_token);
+    this.tokenStorage.markSession();
     return data;
   }
 

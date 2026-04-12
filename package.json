@@ -27,9 +27,9 @@
     "@tanstack/react-router": "^1.166.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "lucide-react": "^1.7.0",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "lucide-react": "^1.8.0",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.5.0",
     "zod": "^4.3.6"
@@ -37,7 +37,7 @@
   "devDependencies": {
     "@eslint/js": "^9.0.0",
     "@tailwindcss/vite": "^4.2.2",
-    "@tanstack/router-cli": "^1.166.25",
+    "@tanstack/router-cli": "^1.166.26",
     "@tanstack/router-plugin": "^1.167.8",
     "@testing-library/jest-dom": "^6.0.0",
     "@testing-library/react": "^16.0.0",
@@ -50,11 +50,11 @@
     "eslint-plugin-react-refresh": "^0.5.0",
     "jsdom": "^29.0.0",
     "msw": "^2.12.14",
-    "prettier": "^3.0.0",
+    "prettier": "^3.8.2",
     "tailwindcss": "^4.0.0",
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.57.2",
-    "vite": "^8.0.3",
+    "vite": "^8.0.8",
     "vitest": "^4.1.2"
   }
 }

@@ -29,11 +29,6 @@ export function AuthProvider({
 
   useEffect(() => {
     const bootstrap = async () => {
-      if (!tokenStorage.hasSession()) {
-        setIsLoading(false);
-        return;
-      }
-
       try {
         await apiClient.refresh();
         const me = await apiClient.getMe();
@@ -44,6 +39,7 @@ export function AuthProvider({
         if (err instanceof ApiError && err.statusCode === 401) {
           tokenStorage.clear();
         }
+        // Network errors: leave session marker so next reload retries
       } finally {
         setIsLoading(false);
       }

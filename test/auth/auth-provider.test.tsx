@@ -117,6 +117,18 @@ describe("AuthProvider", () => {
   it("sets user state after login", async () => {
     const { apiClient, tokenStorage } = buildDeps();
 
+    // No refresh cookie → bootstrap should fail and start unauthenticated
+    server.use(
+      http.post(`${BASE_URL}/api/v1/auth/refresh`, () => {
+        return HttpResponse.json(
+          {
+            error: { code: "INVALID_TOKEN", message: "No session", details: {} }
+          },
+          { status: 401 }
+        );
+      })
+    );
+
     render(
       <AuthProvider apiClient={apiClient} tokenStorage={tokenStorage}>
         <AuthStatus />
