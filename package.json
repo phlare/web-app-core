@@ -37,7 +37,7 @@
   "devDependencies": {
     "@eslint/js": "^9.0.0",
     "@tailwindcss/vite": "^4.2.2",
-    "@tanstack/router-cli": "^1.166.26",
+    "@tanstack/router-cli": "^1.166.33",
     "@tanstack/router-plugin": "^1.167.8",
     "@testing-library/jest-dom": "^6.0.0",
     "@testing-library/react": "^16.0.0",
