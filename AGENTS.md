@@ -6,6 +6,7 @@ This is a React SPA template built with Vite, React 19, TypeScript, and Tailwind
 - Node 24 is pinned in `.nvmrc`; run `nvm use` from the repo root if the shell is on the wrong version
 - Commit workflow: `.claude/instructions/commit_workflow.md`
 - Dependabot PR merging: `.claude/instructions/dependabot_workflow.md`
+- CI/CD setup: `.claude/instructions/ci_cd.md`
 - Only `src/main.tsx` reads `import.meta.env` — all other modules receive config via props or function arguments
 - All success responses from the backend use: `{ "data": { ... } }`
 - All error responses use: `{ "error": { "code": "...", "message": "...", "details": {} } }`
