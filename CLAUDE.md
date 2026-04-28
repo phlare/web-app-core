@@ -8,7 +8,9 @@ React SPA template for building product frontends. This is a reusable foundation
 
 ## Workflows
 
-See workspace-level commit workflow: `../.claude/instructions/commit_workflow.md`
+- Commit workflow: `.claude/instructions/commit_workflow.md`
+- Dependabot PR merging: `.claude/instructions/dependabot_workflow.md`
+- CI/CD setup: `.claude/instructions/ci_cd.md`
 
 ## Commands
 

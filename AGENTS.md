@@ -2,6 +2,11 @@ This is a React SPA template built with Vite, React 19, TypeScript, and Tailwind
 
 ## Project guidelines
 
+- Reusable SPA template for product frontends with auth, API client, routing, shell, and shared UI primitives
+- Node 24 is pinned in `.nvmrc`; run `nvm use` from the repo root if the shell is on the wrong version
+- Commit workflow: `.claude/instructions/commit_workflow.md`
+- Dependabot PR merging: `.claude/instructions/dependabot_workflow.md`
+- CI/CD setup: `.claude/instructions/ci_cd.md`
 - Only `src/main.tsx` reads `import.meta.env` — all other modules receive config via props or function arguments
 - All success responses from the backend use: `{ "data": { ... } }`
 - All error responses use: `{ "error": { "code": "...", "message": "...", "details": {} } }`
@@ -34,3 +39,18 @@ This is a React SPA template built with Vite, React 19, TypeScript, and Tailwind
 - Prettier handles formatting (run `npm run format`)
 - ESLint 9 flat config with `typescript-eslint`, `react-hooks`, and `react-refresh` (run `npm run lint`)
 - CI checks `format:check` and `lint`
+
+## Commands
+
+- Install deps: `npm install`
+- Dev server: `npm run dev`
+- Build: `npm run build`
+- Preview build: `npm run preview`
+- Test suite: `npm test`
+- Typecheck: `npm run typecheck`
+- Pre-commit: `npm run precommit`
+
+## Current Status
+
+- `v0.4` complete
+- See `CHANGELOG.md` for the final template task tracker
