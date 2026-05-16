@@ -3,6 +3,7 @@ This is a React SPA template built with Vite, React 19, TypeScript, and Tailwind
 ## Project guidelines
 
 - Reusable SPA template for product frontends with auth, API client, routing, shell, and shared UI primitives
+- This template must remain usable as a standalone repo. Do not rely on sibling repos, workspace-level skills, or cross-repo local documentation for required setup or usage guidance
 - Node 24 is pinned in `.nvmrc`; run `nvm use` from the repo root if the shell is on the wrong version
 - Commit workflow: `.claude/instructions/commit_workflow.md`
 - Dependabot PR merging: `.claude/instructions/dependabot_workflow.md`
@@ -14,6 +15,7 @@ This is a React SPA template built with Vite, React 19, TypeScript, and Tailwind
 - Use function components with named exports — no default exports, no class components (exception: `ErrorBoundary` is a class component, required by React)
 - Use `ApiClient` via constructor injection — never call `fetch` directly for backend requests
 - Use `ApiError` from `src/lib/api-error.ts` for typed API errors — check `error.code` and `error.statusCode`
+- If referencing companion templates such as `elixir-api-core` or `node-edge-core`, use GitHub links in docs rather than local filesystem assumptions
 
 ## TypeScript guidelines
 
